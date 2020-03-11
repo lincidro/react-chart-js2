@@ -1,34 +1,60 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Chart from './components/Chart'
 //Import from Utils
 import {getRandomColor} from './utils/Utils'
-import {getRandomInt} from './utils/Utils'
+import {generateDataChart} from './utils/Utils'
+import CustomChart from './components/CustomChart';
 
-//Variables de entrada para data
-let labelArray = ['Entrada 1', 'Entrada 2', 'Entrada 3'];
-let numberArray = [getRandomInt(1, 10), getRandomInt(10, 20), getRandomInt(1,5)];
-let backgroundColorArray = [getRandomColor(), getRandomColor(), getRandomColor()];
-
-const data = {
-	labels: labelArray,
-	datasets: [
-    {
-      data: numberArray,
-      backgroundColor: backgroundColorArray
-    }
-  ]
-};
+var labelArray = [];
+var numberArray = [];
+var backgroundColorArray = [];
 
 class App extends Component {
+
+  state = {
+    dataToChart: [],
+    isLoadedState: false
+  }
+  
+  componentDidMount() {
+    fetch('https://api.github.com/events')
+    .then(res => res.json())
+    .then((data) => {
+      this.setState({ 
+        dataToChart: data,
+        isLoadedState: true
+      })
+    })
+    .catch(console.log)
+  }
+
+  generateDataArray() {
+    this.state.dataToChart.slice(0,4).map((contact) => (
+      labelArray.push(contact.actor.login),
+      numberArray.push(contact.actor.id),
+      backgroundColorArray.push(getRandomColor())
+    ));
+    
+    return generateDataChart(labelArray,numberArray,backgroundColorArray);
+  }
+
   render () {
+    
+    const { dataToChart, isLoadedState } = this.state;
+
+    if (!isLoadedState) {
+      return null;
+    }
+
     return (
       <div className = "container">
         <h1>React Chart Js 2</h1>
         <hr/>
         {/* Enviar data a Chart.js */}
-        <Chart dataChart={data}/>
+            { this.state && this.state.dataToChart &&
+                <CustomChart customDataChart={this.generateDataArray()} isLoaded = {isLoadedState} />
+            }
       </div>
     );
   }
