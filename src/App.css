@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.container-fluid {
+  width: 80%;
+  height: 100%;
+}
+
+/* .customChart {
+  padding: 100px, 60px, 100px, 50px;
+} */

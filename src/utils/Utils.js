@@ -46,7 +46,8 @@ Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
   }
 });
 */
-// some of this code is a variation on https://jsfiddle.net/cmyker/u6rr5moq/
+
+// Se configura un plugin para poder agregar el texto al centro del Doughnut Chart
 var originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
 Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
   draw: function() {
@@ -56,21 +57,23 @@ Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
     var ctx = chart.ctx;
     var width = chart.width;
     var height = chart.height;
+    var legends = chart.legend; //Si la leyenda se ubica a la derecha, se debe restar
 
     var fontSize = (height / 180).toFixed(2);
     ctx.font = fontSize + "em Verdana";
     ctx.textBaseline = "middle";
 
+    //Ubicar texto en medio del chart
     var text = chart.config.data.text;
-    var textX = Math.round((width - ctx.measureText(text).width) / 2);
-    var textY = height * 1.05 / 2; //1.05 to align at the middle
-
+    var textX = Math.round((width - ctx.measureText(text).width) / 2) - Math.round(legends.width/2);
+    var textY = height * 1 / 2; // Se multiplica si la leyenda se ubica en 'top' o 'bottom'
+    
     ctx.fillText(text, textX, textY);
   }
 });
 
 export const generateDataChart = (labels, numbers, colors)  => {
-  var dataChart = {
+  let dataChart = {
     labels: labels,
     datasets: [
       {
@@ -78,7 +81,41 @@ export const generateDataChart = (labels, numbers, colors)  => {
         backgroundColor: colors
       }
     ],
-    text: 'Texto 2'
+    text: 'Texto X'
   }
-  return dataChart;
+
+  var params = {
+    animation: {
+        duration: 2000,
+    },
+    display: true,
+    text: numbers,
+    borderWidth: 2,
+    lineWidth: 2,
+    padding: 20,
+    textAlign: 'center',
+    stretch: 45,
+    font: {
+      resizable: true,
+      minSize: 12,
+      maxSize: 18
+    },
+    valuePrecision: 1,
+    percentPrecision: 2,
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 55,
+        bottom: 55,
+      },
+    },
+    legend: { 
+      display: true ,
+      position: 'right'
+    }
+  }
+
+  var data = {dataChart, params}
+  return data;
 }

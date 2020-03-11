@@ -48,13 +48,13 @@ class App extends Component {
     }
 
     return (
-      <div className = "container">
+      <div className = "container-fluid h-100">
         <h1>React Chart Js 2</h1>
         <hr/>
         {/* Enviar data a Chart.js */}
-            { this.state && this.state.dataToChart &&
-                <CustomChart customDataChart={this.generateDataArray()} isLoaded = {isLoadedState} />
-            }
+          { this.state && this.state.dataToChart &&
+              <CustomChart customDataChart={this.generateDataArray()} isLoaded = {isLoadedState} />
+          }
       </div>
     );
   }
