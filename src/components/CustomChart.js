@@ -5,16 +5,11 @@ import 'chartjs-plugin-piechart-outlabels';
 const CustomChart = ({ customDataChart }) => {
   return (
     <div className="row customChart">
-
-      <div className="col-lg-12">
-				
-				<div className="col-lg-12">
-          <Doughnut 
-            data={customDataChart.dataChart} 
-            options = {customDataChart.params}
-          />
-				</div>
-
+      <div className="col-lg-12">		
+        <Doughnut 
+          data={customDataChart.dataChart} 
+          options = {customDataChart.options}
+        />
       </div>
 
     </div>
